@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div style="max-width: 500px; margin: 50px auto; padding: 30px; background-color: #fdfdfd; border-radius: 10px; box-shadow: 0 6px 16px rgba(0,0,0,0.1);">
+  <h2 style="text-align: center; margin-bottom: 25px; color: #333;">Withdraw Bitcoin</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div style="
+        margin-bottom: 15px;
+        padding: 12px 15px;
+        border-radius: 6px;
+        font-weight: 500;
+        background-color: 
+          {% if message.tags == 'success' %}#e6f9f0
+          {% elif message.tags == 'error' %}#ffeaea
+          {% else %}#f0f0f0{% endif %};
+        color: 
+          {% if message.tags == 'success' %}#2e7d32
+          {% elif message.tags == 'error' %}#c0392b
+          {% else %}#333{% endif %};
+        border-left: 5px solid
+          {% if message.tags == 'success' %}#27ae60
+          {% elif message.tags == 'error' %}#e74c3c
+          {% else %}#3498db{% endif %};
+      ">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <p style="text-align: center; margin-bottom: 15px; color: #555;">
+      Current Balance: <strong>{{ wallet.bitcoin_balance|floatformat:8 }}</strong> BTC
+    </p>
+
+    {% if wallet.bitcoin_balance >= 0.0000012 %}
+      <form method="POST" action="">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 18px;">
+          <label for="amount" style="display: block; margin-bottom: 6px; color: #333;">Amount to withdraw (BTC):</label>
+          <input type="number" name="amount" step="0.00000001" min="0.0000012" max="{{ wallet.bitcoin_balance }}"
+                 required
+                 style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label for="wallet_address" style="display: block; margin-bottom: 6px; color: #333;">Recipient Bitcoin Address:</label>
+          <input type="text" name="wallet_address" required
+                 style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+        </div>
+
+        <button type="submit"
+                style="width: 100%; padding: 12px; background-color: #27ae60; color: white; font-weight: bold;
+                       border: none; border-radius: 6px; cursor: pointer; transition: background-color 0.3s;">
+          Submit Withdrawal
+        </button>
+      </form>
+    {% else %}
+      <div style="text-align: center; color: crimson; font-weight: bold; margin-top: 20px;">
+        You must have at least 0.0000012 BTC to make a withdrawal.
+      </div>
+    {% endif %}
+  {% else %}
+    <div style="text-align: center; color: red; font-weight: bold; margin-top: 20px;">
+      You must be logged in to access this page.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

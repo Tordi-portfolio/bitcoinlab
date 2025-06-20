@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="deposit-container">
+    <h2>💸 Deposit Bitcoin</h2>
+
+    <div class="deposit-box">
+        <p><strong>Send Bitcoin to the address below:</strong></p>
+
+        <div class="address-section">
+            <input type="text" id="walletAddress" value="bc1qklfaar303lqxsx3ckfvxf4x8maksyq5hq9vcwh" readonly>
+
+            <button onclick="copyAddress()">Copy</button>
+        </div>
+
+        <div class="qr-code-wrapper">
+            <h3>📷 Bitcoin QR Code</h3>
+            <div class="qr-code">
+                <img src="{% static 'image/bitcoin.jpg' %}" alt="Bitcoin QR Code" class="qr-image">
+            </div>
+        </div>
+
+        <p class="warning">⚠️ Send only BTC to this address. Transaction may take time to confirm.</p>
+    </div>
+
+    <h3 class="mt-5">📄 Your Deposit History</h3>
+
+    <div class="table-wrapper">
+        <table class="deposit-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Wallet</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    <td>{{ tx.created_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ tx.amount }} BTC</td>
+                    <td>{{ tx.address }}</td>
+                    <td><span class="badge badge-{{ tx.status }}">{{ tx.status|title }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No deposit transactions yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .deposit-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.deposit-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.deposit-box {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.address-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.address-section input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px 0 0 8px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.address-section button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #2a5298;
+    color: white;
+    font-weight: bold;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+.address-section button:hover {
+    background-color: #1d3b72;
+}
+
+.qr-code {
+    margin: 20px 0;
+}
+
+.warning {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.table-wrapper {
+    margin-top: 30px;
+    overflow-x: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.deposit-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.deposit-table th, .deposit-table td {
+    padding: 14px 20px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.deposit-table thead {
+    background-color: #2a5298;
+    color: white;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.badge-pending {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-completed {
+    background-color: #28a745;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .deposit-container h2 {
+        font-size: 22px;
+    }
+
+    .address-section {
+        flex-direction: column;
+    }
+
+    .address-section input,
+    .address-section button {
+        border-radius: 8px;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .deposit-table {
+        font-size: 14px;
+    }
+}
+</style>
+
+<style>
+    .qr-code-wrapper {
+    max-width: 360px;
+    margin: 30px auto;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.qr-code img.qr-image {
+    width: 100%;
+    max-width: 240px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.qr-code img.qr-image:hover {
+    transform: scale(1.03);
+}
+.qr-code::after {
+    content: "📱 Scan with your Bitcoin wallet";
+    display: block;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #555;
+}
+
+</style>
+
+<script>
+function copyAddress() {
+    const addressField = document.getElementById("walletAddress");
+    addressField.select();
+    addressField.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("✅ Wallet address copied!");
+}
+</script>
+
+
+<div class="max-w-xl mx-auto mt-10 p-6 bg-white shadow rounded-lg">
+  <h2 class="text-2xl font-bold mb-4">Confirm Your Deposit</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Email</label>
+      {{ form.email }}
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Cryptocurrency</label>
+      {{ form.crypto }}
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Amount</label>
+      {{ form.amount }}
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Upload Receipt</label>
+      {{ form.receipt }}
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Send</button>
+  </form>
+</div>
+
+
+
+
+{% endblock %}

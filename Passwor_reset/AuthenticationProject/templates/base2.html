@@ -1,0 +1,163 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BitcoinLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    body.light-theme {
+      background-color: #fdfdfb;
+      color: #333;
+    }
+
+    body.dark-theme {
+      background-color: #3e2f23;
+      color: #f3eada;
+    }
+
+    nav {
+      background-color: #3498db;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a, .theme-toggle-btn {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      padding: 5px 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover::after {
+      width: 100%;
+    }
+
+    nav ul li a:hover, .theme-toggle-btn:hover {
+      color: #f1f1f1;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background-color: white;
+      margin: 4px 0;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      nav ul {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #3498db;
+        flex-direction: column;
+        align-items: center;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+      }
+
+      nav ul.show {
+        max-height: 300px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body class="light-theme">
+
+<nav>
+  <div class="logo">Bitcoinlab</div>
+  <div class="menu-toggle" onclick="document.querySelector('nav ul').classList.toggle('show')">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul>
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'balance' %}">Wallet</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+      {% if request.user.is_staff %}
+        <li><a href="{% url 'manage_balances' %}">Manage Balances</a></li>
+      {% endif %}
+    {% else %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'login' %}">Login</a></li>
+      <li><a href="{% url 'register' %}">Register</a></li>
+    {% endif %}
+    <li><button class="theme-toggle-btn" onclick="toggleTheme()">Switch Theme</button></li>
+  </ul>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    body.classList.toggle('dark-theme');
+    body.classList.toggle('light-theme');
+    const theme = body.classList.contains('dark-theme') ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.remove('light-theme');
+      document.body.classList.add('dark-theme');
+    }
+  });
+</script>
+
+</body>
+</html>
