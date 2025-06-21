@@ -390,53 +390,94 @@ def deposit_submissions_admin(request):
     return render(request, 'wallet/deposit_submissions.html', {'deposits': deposits})
 
 
-
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from decimal import Decimal
+from .models import Wallet, Transaction, UserToUserTransfer
 from .forms import UserToUserTransferForm
-from .models import UserToUserTransfer
 
 @login_required
-def transfer_balance(request):
-    if request.method == 'POST':
-        form = UserToUserTransferForm(request.POST)
-        if form.is_valid():
-            recipient = form.cleaned_data['recipient_identifier']
-            crypto = form.cleaned_data['crypto']
-            amount = form.cleaned_data['amount']
+def transfer_crypto(request):
+    user = request.user
+    form = UserToUserTransferForm(request.POST or None)
 
-            sender_wallet = Wallet.objects.get(user=request.user)
+    # Get current user's transaction history
+    transactions = Transaction.objects.filter(user=user).order_by('-created_at')
+
+    if request.method == 'POST' and form.is_valid():
+        recipient = form.cleaned_data['recipient_identifier']
+        crypto = form.cleaned_data['crypto']
+        amount = form.cleaned_data['amount']
+
+        try:
+            wallet = Wallet.objects.get(user=user)
             recipient_wallet = Wallet.objects.get(user=recipient)
 
-            # Map crypto type to wallet field
-            crypto_field = {
-                'BTC': 'bitcoin_balance',
-                'ETH': 'eth_balance',
-                'USDT': 'usdt_balance',
-                'TON': 'ton_balance',
-                'SOL': 'solana_balance',
-            }[crypto]
+            if crypto == 'BTC':
+                if wallet.bitcoin_balance < amount:
+                    raise ValueError("Insufficient BTC balance.")
+                wallet.bitcoin_balance -= amount
+                recipient_wallet.bitcoin_balance += amount
+            elif crypto == 'ETH':
+                if wallet.eth_balance < amount:
+                    raise ValueError("Insufficient ETH balance.")
+                wallet.eth_balance -= amount
+                recipient_wallet.eth_balance += amount
+            elif crypto == 'USDT':
+                if wallet.usdt_balance < amount:
+                    raise ValueError("Insufficient USDT balance.")
+                wallet.usdt_balance -= amount
+                recipient_wallet.usdt_balance += amount
+            elif crypto == 'TON':
+                if wallet.ton_balance < amount:
+                    raise ValueError("Insufficient TON balance.")
+                wallet.ton_balance -= amount
+                recipient_wallet.ton_balance += amount
+            elif crypto == 'SOL':
+                if wallet.solana_balance < amount:
+                    raise ValueError("Insufficient SOL balance.")
+                wallet.solana_balance -= amount
+                recipient_wallet.solana_balance += amount
 
-            sender_balance = getattr(sender_wallet, crypto_field)
-            if sender_balance < amount:
-                messages.error(request, f"Insufficient {crypto} balance.")
-            else:
-                # Transfer funds
-                setattr(sender_wallet, crypto_field, sender_balance - amount)
-                setattr(recipient_wallet, crypto_field, getattr(recipient_wallet, crypto_field) + amount)
+            wallet.save()
+            recipient_wallet.save()
 
-                sender_wallet.save()
-                recipient_wallet.save()
+            # Record in UserToUserTransfer
+            UserToUserTransfer.objects.create(
+                sender=user,
+                recipient=recipient,
+                crypto=crypto,
+                amount=amount,
+                status='completed'
+            )
 
-                UserToUserTransfer.objects.create(
-                    sender=request.user,
-                    recipient=recipient,
-                    crypto=crypto,
-                    amount=amount,
-                    status='completed'
-                )
+            # Record in Transaction history
+            Transaction.objects.create(
+                user=user,
+                transaction_type='withdrawal',
+                amount=amount,
+                address=f"Sent to {recipient.username}",
+                status='completed'
+            )
 
-                messages.success(request, f"Transferred {amount} {crypto} to {recipient.username}.")
-                return redirect('transfer')
-    else:
-        form = UserToUserTransferForm()
+            Transaction.objects.create(
+                user=recipient,
+                transaction_type='deposit',
+                amount=amount,
+                address=f"Received from {user.username}",
+                status='completed'
+            )
 
-    return render(request, 'wallet/transfer.html', {'form': form})
+            messages.success(request, f"{amount} {crypto} sent to {recipient.username} successfully!")
+            return redirect('transfer_crypto')
+
+        except ValueError as e:
+            messages.error(request, str(e))
+        except Wallet.DoesNotExist:
+            messages.error(request, "Wallet not found.")
+
+    return render(request, 'wallet/transfer_crypto.html', {
+        'form': form,
+        'transactions': transactions
+    })
