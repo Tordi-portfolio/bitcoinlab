@@ -51,3 +51,23 @@ class DepositConfirmation(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.crypto} - {self.amount}"
+    
+
+class UserToUserTransfer(models.Model):
+    CRYPTO_CHOICES = [
+        ('BTC', 'Bitcoin'),
+        ('ETH', 'Ethereum'),
+        ('USDT', 'USDT'),
+        ('TON', 'Toncoin'),
+        ('SOL', 'Solana'),
+    ]
+
+    sender = models.ForeignKey(User, related_name='sent_transfers', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_transfers', on_delete=models.CASCADE)
+    crypto = models.CharField(max_length=10, choices=CRYPTO_CHOICES)
+    amount = models.DecimalField(max_digits=18, decimal_places=8)
+    status = models.CharField(max_length=10, choices=[('pending', 'Pending'), ('completed', 'Completed')], default='completed')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender.username} sent {self.amount} {self.crypto} to {self.recipient.username}"

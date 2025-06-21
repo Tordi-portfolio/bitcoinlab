@@ -388,3 +388,55 @@ def deposit_form_view(request):
 def deposit_submissions_admin(request):
     deposits = DepositConfirmation.objects.all().order_by('-submitted_at')
     return render(request, 'wallet/deposit_submissions.html', {'deposits': deposits})
+
+
+
+from .forms import UserToUserTransferForm
+from .models import UserToUserTransfer
+
+@login_required
+def transfer_balance(request):
+    if request.method == 'POST':
+        form = UserToUserTransferForm(request.POST)
+        if form.is_valid():
+            recipient = form.cleaned_data['recipient_identifier']
+            crypto = form.cleaned_data['crypto']
+            amount = form.cleaned_data['amount']
+
+            sender_wallet = Wallet.objects.get(user=request.user)
+            recipient_wallet = Wallet.objects.get(user=recipient)
+
+            # Map crypto type to wallet field
+            crypto_field = {
+                'BTC': 'bitcoin_balance',
+                'ETH': 'eth_balance',
+                'USDT': 'usdt_balance',
+                'TON': 'ton_balance',
+                'SOL': 'solana_balance',
+            }[crypto]
+
+            sender_balance = getattr(sender_wallet, crypto_field)
+            if sender_balance < amount:
+                messages.error(request, f"Insufficient {crypto} balance.")
+            else:
+                # Transfer funds
+                setattr(sender_wallet, crypto_field, sender_balance - amount)
+                setattr(recipient_wallet, crypto_field, getattr(recipient_wallet, crypto_field) + amount)
+
+                sender_wallet.save()
+                recipient_wallet.save()
+
+                UserToUserTransfer.objects.create(
+                    sender=request.user,
+                    recipient=recipient,
+                    crypto=crypto,
+                    amount=amount,
+                    status='completed'
+                )
+
+                messages.success(request, f"Transferred {amount} {crypto} to {recipient.username}.")
+                return redirect('transfer')
+    else:
+        form = UserToUserTransferForm()
+
+    return render(request, 'wallet/transfer.html', {'form': form})
