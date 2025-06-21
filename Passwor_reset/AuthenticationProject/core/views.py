@@ -81,7 +81,7 @@ def withdraw(request):
         messages.error(request, "Wallet not found.")
         return redirect("balance")
 
-    MIN_WITHDRAW = Decimal("0.0000012")
+    MIN_WITHDRAW = Decimal("0.001")
 
     if request.method == "POST":
         try:
