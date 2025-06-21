@@ -177,7 +177,7 @@
       <li><a href="{% url 'deposit' %}">Deposit</a></li>
       <li><a href="{% url 'withdraw' %}">Withdraw</a></li>
       <li><a href="{% url 'transaction' %}">My Transactions</a></li>
-      <li><a href="{% url 'transfer_crypto' %}" class="btn btn-primary">Transfer Crypto</a></li>
+      <li><a href="{% url 'transfer_crypto' %}" class="btn btn-primary">Internal Transfer</a></li>
       {% if request.user.is_staff %}
       <li><a href="{% url 'create_transaction' %}">New Transaction</a></li>
       <li><a href="{% url 'manage_balances' %}">Admin Panel</a></li>
