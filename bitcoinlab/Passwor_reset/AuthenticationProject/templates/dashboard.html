@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .timer-container {
+        max-width: 400px;
+        margin: 80px auto;
+        padding: 30px;
+        background-color: #1e1e2f;
+        color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .timer-container h4 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: #ffc107;
+    }
+
+    .timer-label {
+        font-size: 18px;
+        color: #ddd;
+    }
+
+    #countdown {
+        font-size: 32px;
+        margin-top: 10px;
+        color: #00ff99;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+</style>
+
+<div class="timer-container">
+    <h4>💰 Daily Bonus Timer</h4>
+    <p class="timer-label">⏰ Next bonus in:</p>
+    <div id="countdown">Loading...</div>
+</div>
+
+<script>
+    const nextBonusTime = new Date("{{ next_bonus_time|date:'Y-m-d H:i:s' }}").getTime();
+
+    const countdown = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = nextBonusTime - now;
+
+        if (distance < 0) {
+            document.getElementById("countdown").innerHTML = "✅ Bonus added!";
+            clearInterval(countdown);
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML =
+            `${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+</script>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .deposit-container {
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        color: #f0f0f0;
+    }
+
+    .deposit-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 30px;
+        color: #00ffcc;
+    }
+
+    .deposit-box {
+        background-color: #1e1e1e;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        text-align: center;
+    }
+
+    .address-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 15px 0;
+    }
+
+    .address-section input {
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #333;
+        background-color: #2c2c2c;
+        color: #fff;
+        border-radius: 8px 0 0 8px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .address-section button {
+        padding: 12px 15px;
+        border: none;
+        background-color: #00ffcc;
+        color: #121212;
+        font-weight: bold;
+        border-radius: 0 8px 8px 0;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .address-section button:hover {
+        background-color: #00e6b8;
+    }
+
+    .warning {
+        color: #ff6666;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    .qr-code-wrapper {
+        max-width: 360px;
+        margin: 30px auto;
+        text-align: center;
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+    }
+
+    .qr-code img.qr-image {
+        width: 100%;
+        max-width: 240px;
+        border-radius: 12px;
+        border: 1px solid #444;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .qr-code img.qr-image:hover {
+        transform: scale(1.03);
+    }
+
+    .qr-code::after {
+        content: "📱 Scan with your Bitcoin wallet";
+        display: block;
+        margin-top: 12px;
+        font-size: 14px;
+        color: #ccc;
+    }
+
+    .table-wrapper {
+        margin-top: 40px;
+        overflow-x: auto;
+        background: #1e1e1e;
+        border-radius: 10px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+    }
+
+    .deposit-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+        color: #f8f8f8;
+    }
+
+    .deposit-table th, .deposit-table td {
+        padding: 14px 20px;
+        text-align: left;
+        border-bottom: 1px solid #333;
+    }
+
+    .deposit-table thead {
+        background-color: #00ffcc;
+        color: #121212;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        display: inline-block;
+        text-transform: capitalize;
+    }
+
+    .badge-pending {
+        background-color: #ffc107;
+        color: #121212;
+    }
+
+    .badge-completed {
+        background-color: #28a745;
+        color: white;
+    }
+
+    @media (max-width: 600px) {
+        .deposit-container h2 {
+            font-size: 22px;
+        }
+
+        .address-section {
+            flex-direction: column;
+        }
+
+        .address-section input,
+        .address-section button {
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .deposit-table {
+            font-size: 14px;
+        }
+    }
+</style>
+
+<div class="deposit-container">
+    <h2>💸 Deposit USDT</h2>
+
+    <div class="deposit-box">
+        <p><strong>Send USDT to the address below:</strong></p>
+
+        <div class="address-section">
+            <input type="text" id="walletAddress" value="bc1qklfaar303lqxsx3ckfvxf4x8maksyq5hq9vcwh" readonly>
+            <button onclick="copyAddress()">Copy</button>
+        </div>
+
+        <div class="qr-code-wrapper">
+            <h3>📷 USDT QR Code</h3>
+            <div class="qr-code">
+                <img src="{% static 'image/bitcoin.jpg' %}" alt="Bitcoin QR Code" class="qr-image">
+            </div>
+        </div>
+
+        <p class="warning">⚠️ Send only USDT to this address. Transaction may take time to confirm.</p>
+    </div>
+
+    <h3 class="mt-5" style="color:#00ffcc;">📄 Your Deposit History</h3>
+
+    <div class="table-wrapper">
+        <table class="deposit-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Wallet</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in transactions %}
+                <tr>
+                    <td>{{ tx.created_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ tx.amount }} BTC</td>
+                    <td>{{ tx.address }}</td>
+                    <td><span class="badge badge-{{ tx.status }}">{{ tx.status|title }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No deposit transactions yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function copyAddress() {
+        const addressField = document.getElementById("walletAddress");
+        addressField.select();
+        addressField.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("✅ Wallet address copied!");
+    }
+</script>
+{% endblock %}
