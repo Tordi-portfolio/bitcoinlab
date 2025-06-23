@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BitcoinLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* ---------- TOP NAVIGATION ---------- */
+    .top-nav {
+      background-color: #3498db;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1000;
+    }
+
+    .top-nav .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .top-nav ul.top-nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .top-nav ul.top-nav-links li {
+      position: relative;
+    }
+
+    .top-nav ul.top-nav-links li a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      padding: 8px 14px;
+      border: 1px solid white;
+      border-radius: 4px;
+      transition: 0.3s ease;
+    }
+
+    .top-nav ul.top-nav-links li a:hover {
+      background-color: white;
+      color: #3498db;
+    }
+
+    /* ---------- MOBILE MENU ---------- */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .menu-toggle span {
+      height: 3px;
+      width: 25px;
+      background-color: white;
+      margin: 4px 0;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .top-nav ul.top-nav-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #3498db;
+        flex-direction: column;
+        align-items: flex-start;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+        padding: 0 20px;
+      }
+
+      .top-nav ul.top-nav-links.show {
+        max-height: 500px;
+        padding-bottom: 20px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+    }
+
+    /* ---------- MESSAGES ---------- */
+    .message-container {
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 0 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .alert {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 15.5px;
+      font-weight: 500;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .alert .icon {
+      font-size: 20px;
+    }
+
+    .alert-success {
+      background-color: #e6f9f0;
+      color: #2e7d32;
+      border-left: 5px solid #27ae60;
+    }
+
+    .alert-error {
+      background-color: #ffeaea;
+      color: #c0392b;
+      border-left: 5px solid #c0392b;
+    }
+
+    .alert-warning {
+      background-color: #fff8e6;
+      color: #e67e22;
+      border-left: 5px solid #e67e22;
+    }
+
+    .alert-info {
+      background-color: #eaf3ff;
+      color: #2c3e50;
+      border-left: 5px solid #3498db;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="logo">BitcoinLab</div>
+  <div class="menu-toggle" onclick="document.querySelector('.top-nav-links').classList.toggle('show')">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul class="top-nav-links">
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'deposit' %}">Deposit</a></li>
+      <li><a href="{% url 'withdraw' %}">Withdraw To CEX</a></li>
+      <li><a href="{% url 'transaction' %}">My Transactions</a></li>
+      <li><a href="{% url 'transfer_crypto' %}" class="btn btn-primary">Internal Transfer</a></li>
+      {% if request.user.is_staff %}
+      <li><a href="{% url 'create_transaction' %}">New Transaction</a></li>
+      <li><a href="{% url 'manage_balances' %}">Admin Panel</a></li>
+      {% endif %}
+      <li><a href="{% url 'airdrop' %}">Airdrop</a></li>
+      <li><a href="{% url 'dashboard' %}">Bonus Timer</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'airdrop' %}">Airdrop</a></li>
+      <li><a href="{% url 'login' %}">Login</a></li>
+      <li><a href="{% url 'register' %}">Register</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<!-- MESSAGES -->
+{% if messages %}
+  <div class="message-container">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        <span class="icon">
+          {% if message.tags == 'success' %}
+            ✔️
+          {% elif message.tags == 'error' %}
+            ❌
+          {% elif message.tags == 'warning' %}
+            ⚠️
+          {% else %}
+            ℹ️
+          {% endif %}
+        </span>
+        <span class="text">{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- PAGE CONTENT -->
+{% block content %}
+{% endblock %}
+
+
+
+<!-- FOOTER -->
+<footer style="background-color: #111827; color: #d1d5db; padding: 3rem 1rem; margin-top: 5rem;">
+  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem;">
+    <div>
+      <h3 style="color:white; font-size: 1.5rem;">BitcoinLab</h3>
+      <p>Your all-in-one place to store and invest Bitcoin crypto.</p>
+    </div>
+    <div>
+      <h4 style="color:white;">Quick Links</h4>
+      <ul style="list-style: none; padding-left: 0;">
+        <li><a href="{% url 'home' %}" style="color: #9ca3af;">Home</a></li>
+        <li><a href="#" style="color: #9ca3af;">Admins</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:white;">Contact</h4>
+      <p>123 Main Street<br/>City, Country</p>
+      <p>Email: bitcoinlabemailcenter@gmail.com</p>
+      <p>Phone: +123 456 7890</p>
+    </div>
+    <div>
+      <h4 style="color:white;">Follow Us</h4>
+      <div style="display:flex; gap:10px;">
+        <a href="#" style="color:#9ca3af;">🌐</a>
+        <a href="#" style="color:#9ca3af;">🐦</a>
+        <a href="#" style="color:#9ca3af;">📘</a>
+        <a href="#" style="color:#9ca3af;">📸</a>
+      </div>
+    </div>
+  </div>
+  <div style="border-top: 1px solid #374151; margin-top: 2.5rem; padding-top: 1.5rem; text-align: center; color: #6b7280;">
+    © 2025 BitcoinLab. All rights reserved.
+  </div>
+</footer>
+
+</body>
+</html>

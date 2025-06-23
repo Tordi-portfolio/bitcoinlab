@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="deposit-container">
+    <h1 class="deposit-title">Fund Your Wallet</h1>
+    <p class="deposit-subtitle">Choose a cryptocurrency to deposit:</p>
+    
+    <div class="deposit-options">
+        <a href="{% url 'btc' %}" class="deposit-card btc">
+            <img src="{% static 'image/bitcoin-btc-logo.png' %}" alt="BTC">
+            <span>Bitcoin (BTC)</span>
+        </a>
+        <a href="{% url 'eth' %}" class="deposit-card eth">
+            <img src="{% static 'image/ethereum-eth-logo.png' %}" alt="ETH">
+            <span>Ethereum (ETH)</span>
+        </a>
+        <a href="{% url 'sol' %}" class="deposit-card sol">
+            <img src="{% static 'image/solana-sol-logo.png' %}" alt="SOL">
+            <span>Solana (SOL)</span>
+        </a>
+        <a href="{% url 'usdt' %}" class="deposit-card usdt">
+            <img src="{% static 'image/tether-usdt-logo.png' %}" alt="USDT">
+            <span>Tether (USDT)</span>
+        </a>
+        <a href="{% url 'ton' %}" class="deposit-card ton">
+            <img src="{% static 'image/toncoin-ton-logo.png' %}" alt="TON">
+            <span>Toncoin (TON)</span>
+        </a>
+        <a href="{% url 'bnb' %}" class="deposit-card ton">
+            <img src="{% static 'image/binance-coin-bnb-logo.png' %}" alt="BNB">
+            <span>Binancecoin (BNB)</span>
+        </a>
+        <a href="{% url 'tron' %}" class="deposit-card ton">
+            <img src="{% static 'image/tron-trx-logo.png' %}" alt="TRX">
+            <span>Troncoin (TRX)</span>
+        </a>
+        <a href="{% url 'doge' %}" class="deposit-card ton">
+            <img src="{% static 'image/dogecoin-doge-logo.png' %}" alt="DOGE">
+            <span>Dogecoin (DOGE)</span>
+        </a>
+        <a href="{% url 'sui' %}" class="deposit-card ton">
+            <img src="{% static 'image/sui-sui-logo.png' %}" alt="SUI">
+            <span>suicoin (BNB)</span>
+        </a>
+        <a href="{% url 'bgb' %}" class="deposit-card ton">
+            <img src="{% static 'image/bitget-token-new-bgb-logo.png' %}" alt="BGB">
+            <span>Bitgetcoin (BGB)</span>
+        </a>
+        <a href="{% url 'usdc' %}" class="deposit-card ton">
+            <img src="{% static 'image/usd-coin-usdc-logo.png' %}" alt="USDC">
+            <span>usdccoin (USDC)</span>
+        </a>
+    </div>
+</div>
+
+<style>
+    .deposit-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+    background: #10151f;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: white;
+}
+
+.deposit-title {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.deposit-subtitle {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.deposit-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.deposit-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1e2738;
+    padding: 20px;
+    border-radius: 12px;
+    transition: transform 0.3s ease, background 0.3s ease;
+    text-decoration: none;
+    color: white;
+}
+
+.deposit-card:hover {
+    background: #2d3a50;
+    transform: translateY(-5px);
+}
+
+.deposit-card img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+</style>
+{% endblock %}

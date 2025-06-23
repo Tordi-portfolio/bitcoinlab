@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitcoinLab Login</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to right, #2980b9, #6dd5fa, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .center {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .center h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .txt_field {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .txt_field input {
+      width: 100%;
+      padding: 10px 10px 10px 5px;
+      font-size: 16px;
+      border: none;
+      border-bottom: 2px solid #adadad;
+      background: transparent;
+      outline: none;
+    }
+
+    .txt_field label {
+      position: absolute;
+      top: 10px;
+      left: 5px;
+      color: #999;
+      font-size: 16px;
+      pointer-events: none;
+      transition: 0.3s ease all;
+    }
+
+    .txt_field input:focus ~ label,
+    .txt_field input:valid ~ label {
+      top: -10px;
+      font-size: 12px;
+      color: #3498db;
+    }
+
+    .txt_field span {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #3498db;
+      transition: 0.3s;
+    }
+
+    .txt_field input:focus ~ span {
+      width: 100%;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background: #3498db;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background: #2980b9;
+    }
+
+    .signup_link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .signup_link a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .signup_link a:hover {
+      text-decoration: underline;
+    }
+
+    h4 {
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      .center {
+        padding: 30px 20px;
+      }
+
+      .center h1 {
+        font-size: 24px;
+      }
+
+      input[type="submit"] {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .txt_field input {
+        font-size: 14px;
+      }
+    }
+  </style>
+
+  <style>
+    .message-container {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 15.5px;
+  font-weight: 500;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert .icon {
+  font-size: 20px;
+}
+
+.alert .text {
+  flex: 1;
+}
+
+/* Success */
+.alert-success {
+  background-color: #e6f9f0;
+  color: #2e7d32;
+  border-left: 5px solid #27ae60;
+}
+
+/* Error */
+.alert-error {
+  background-color: #ffeaea;
+  color: #c0392b;
+  border-left: 5px solid #c0392b;
+}
+
+/* Warning */
+.alert-warning {
+  background-color: #fff8e6;
+  color: #e67e22;
+  border-left: 5px solid #e67e22;
+}
+
+/* Info */
+.alert-info {
+  background-color: #eaf3ff;
+  color: #2c3e50;
+  border-left: 5px solid #3498db;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="center">
+    <h1>Login</h1>
+
+{% if messages %}
+  <div class="message-container">
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'success' %}alert-success
+                       {% elif message.tags == 'error' %}alert-error
+                       {% elif message.tags == 'warning' %}alert-warning
+                       {% else %}alert-info{% endif %}">
+        <span class="icon">
+          {% if message.tags == 'success' %}
+            ✔️
+          {% elif message.tags == 'error' %}
+            ❌
+          {% elif message.tags == 'warning' %}
+            ⚠️
+          {% else %}
+            ℹ️
+          {% endif %}
+        </span>
+        <span class="text">{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="txt_field">
+        <input type="text" required name="username">
+        <span></span>
+        <label>Username</label>
+      </div>
+
+      <div class="txt_field">
+        <input type="password" required name="password">
+        <span></span>
+        <label>Password</label>
+      </div>
+
+      <input type="submit" value="Login">
+
+      <div class="signup_link">
+        Not a member? <a href="{% url 'register' %}">Signup</a><br>
+        <p>Forgot your Password? <a href="{% url 'forgot-password' %}">Reset Password</a></p> 
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>
