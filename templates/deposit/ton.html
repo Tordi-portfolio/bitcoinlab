@@ -94,7 +94,7 @@
     }
 
     .qr-code::after {
-        content: "📱 Scan with your Bitcoin wallet";
+        content: "📱 Scan with your Toncoin wallet";
         display: block;
         margin-top: 12px;
         font-size: 14px;
@@ -169,20 +169,20 @@
 </style>
 
 <div class="deposit-container">
-    <h2>💸 Deposit Bitcoin</h2>
+    <h2>💸 Deposit Toncoin</h2>
 
     <div class="deposit-box">
-        <p><strong>Send Bitcoin to the address below:</strong></p>
+        <p><strong>Send Toncoin to the address below:</strong></p>
 
         <div class="address-section">
-            <input type="text" id="walletAddress" value="bc1qklfaar303lqxsx3ckfvxf4x8maksyq5hq9vcwh" readonly>
+            <input type="text" id="walletAddress" value="UQD-yQHaUaeGmHmO3lOQZueOH3Z9sjryPHSS47inOtVEjm6z" readonly>
             <button onclick="copyAddress()">Copy</button>
         </div>
 
         <div class="qr-code-wrapper">
-            <h3>📷 Bitcoin QR Code</h3>
+            <h3>📷 Toncoin QR Code</h3>
             <div class="qr-code">
-                <img src="{% static 'image/bitcoin.jpg' %}" alt="Bitcoin QR Code" class="qr-image">
+                <img src="{% static 'image/ton-barcode.png' %}" alt="Bitcoin QR Code" class="qr-image">
             </div>
         </div>
 

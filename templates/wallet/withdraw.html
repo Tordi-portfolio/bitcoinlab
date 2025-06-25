@@ -1,145 +1,20 @@
-{% extends 'base.html' %}
-{% load static %}
+<form method="POST">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label>Amount (BTC):</label>
+        <input type="number" name="amount" step="0.00000001" class="form-control" required>
+    </div>
 
-{% block content %}
-<style>
-    body {
-        background-color: #000000;
-        font-family: 'Segoe UI', sans-serif;
-    }
+    <div class="form-group">
+        <label>Wallet Address:</label>
+        <input type="text" name="wallet_address" class="form-control" required>
+    </div>
 
-    .withdraw-container {
-        max-width: 500px;
-        margin: 50px auto;
-        padding: 30px;
-        background-color: #1c1c1e;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
-        color: #f5f5f5;
-    }
+    <div class="form-group">
+        <label>Transaction PIN:</label>
+        <input type="password" name="pin" class="form-control" required>
+    </div>
 
-    .withdraw-container h2 {
-        text-align: center;
-        margin-bottom: 25px;
-        font-size: 26px;
-        color: #ffffff;
-    }
-
-    .message-box {
-        margin-bottom: 15px;
-        padding: 12px 15px;
-        border-radius: 6px;
-        font-weight: 500;
-    }
-
-    .message-success {
-        background-color: #144e38;
-        color: #9ff5c4;
-        border-left: 5px solid #2ecc71;
-    }
-
-    .message-error {
-        background-color: #4a1a1a;
-        color: #ffbdbd;
-        border-left: 5px solid #e74c3c;
-    }
-
-    .message-info {
-        background-color: #2c2c2e;
-        color: #ddd;
-        border-left: 5px solid #3498db;
-    }
-
-    .withdraw-container label {
-        color: #ccc;
-        font-weight: 500;
-    }
-
-    .withdraw-container input {
-        width: 100%;
-        padding: 10px;
-        background: #2c2c2e;
-        color: #fff;
-        border: 1px solid #444;
-        border-radius: 8px;
-        margin-top: 5px;
-        margin-bottom: 18px;
-    }
-
-    .withdraw-container input:focus {
-        outline: none;
-        border-color: #27ae60;
-        background: #333;
-    }
-
-    .btn-submit {
-        width: 100%;
-        padding: 12px;
-        background-color: #27ae60;
-        color: white;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn-submit:hover {
-        background-color: #1e8449;
-    }
-
-    .info-text {
-        text-align: center;
-        margin-bottom: 15px;
-        color: #aaa;
-    }
-
-    .error-message {
-        text-align: center;
-        color: #ff4d4d;
-        font-weight: bold;
-        margin-top: 20px;
-    }
-</style>
-
-<div class="withdraw-container">
-    <h2>Withdraw Bitcoin</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message-box message-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-
-    {% if user.is_authenticated %}
-        <p class="info-text">
-            Current Balance: <strong>{{ wallet.bitcoin_balance|floatformat:8 }}</strong> BTC
-        </p>
-
-        {% if wallet.bitcoin_balance >= 0.0000012 %}
-            <form method="POST">
-                {% csrf_token %}
-
-                <label for="amount">Amount to withdraw (BTC):</label>
-                <input type="number" name="amount" step="0.00000001" min="0.0000012" max="{{ wallet.bitcoin_balance }}" required>
-
-                <label for="wallet_address">Recipient Bitcoin Address:</label>
-                <input type="text" name="wallet_address" required>
-
-                <button type="submit" class="btn-submit">Submit Withdrawal</button>
-            </form>
-        {% else %}
-            <div class="error-message">
-                🚫 You must have at least 0.0000012 BTC to make a withdrawal.
-            </div>
-        {% endif %}
-    {% else %}
-        <div class="error-message">
-            🚫 You must be logged in to access this page.
-        </div>
-    {% endif %}
-</div>
-
-{% endblock %}
+    <button type="submit" class="btn btn-danger mt-2">Withdraw</button>
+</form>

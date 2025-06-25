@@ -22,12 +22,17 @@
     color: #ffffff;
   }
 
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+  }
+
   .transaction-table {
     width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
     background-color: #1c1c1e;
-    border-radius: 10px;
-    overflow: hidden;
     font-size: 16px;
     box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
   }
@@ -42,6 +47,7 @@
     padding: 14px 20px;
     border-bottom: 1px solid #2c2c2e;
     text-align: left;
+    white-space: nowrap;
   }
 
   .transaction-table tbody tr:hover {
@@ -75,35 +81,38 @@
     text-align: center;
   }
 
-  /* Responsive */
+  /* Responsive Styling */
   @media screen and (max-width: 768px) {
+    .container {
+      padding: 30px 15px;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
     .transaction-table {
       font-size: 14px;
     }
 
     .transaction-table th,
     .transaction-table td {
-      padding: 10px;
-      white-space: nowrap;
-    }
-
-    h2 {
-      font-size: 24px;
+      padding: 10px 12px;
     }
   }
 
   @media screen and (max-width: 480px) {
+    h2 {
+      font-size: 20px;
+    }
+
     .transaction-table {
       font-size: 13px;
     }
 
     .transaction-table th,
     .transaction-table td {
-      padding: 8px;
-    }
-
-    h2 {
-      font-size: 20px;
+      padding: 8px 10px;
     }
   }
 </style>
@@ -111,7 +120,7 @@
 <div class="container">
   <h2>📊 Transaction History</h2>
 
-  <div class="table-responsive">
+  <div class="table-wrapper">
     <table class="transaction-table">
       <thead>
         <tr>

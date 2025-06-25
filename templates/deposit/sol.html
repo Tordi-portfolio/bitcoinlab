@@ -94,7 +94,7 @@
     }
 
     .qr-code::after {
-        content: "📱 Scan with your Bitcoin wallet";
+        content: "📱 Scan with your Solana wallet";
         display: block;
         margin-top: 12px;
         font-size: 14px;
@@ -175,14 +175,14 @@
         <p><strong>Send solana to the address below:</strong></p>
 
         <div class="address-section">
-            <input type="text" id="walletAddress" value="bc1qklfaar303lqxsx3ckfvxf4x8maksyq5hq9vcwh" readonly>
+            <input type="text" id="walletAddress" value="DbjFBoWAanFjxYEGLhQi1EuGczprAnf8f2aaWRssQVq6" readonly>
             <button onclick="copyAddress()">Copy</button>
         </div>
 
         <div class="qr-code-wrapper">
             <h3>📷 solana QR Code</h3>
             <div class="qr-code">
-                <img src="{% static 'image/bitcoin.jpg' %}" alt="Bitcoin QR Code" class="qr-image">
+                <img src="{% static 'image/sol-barcode.png' %}" alt="Bitcoin QR Code" class="qr-image">
             </div>
         </div>
 

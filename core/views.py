@@ -577,7 +577,17 @@ from .models import Wallet
 from datetime import timedelta
 
 
+from .utils import apply_daily_bonus
+from datetime import timedelta
+
+@login_required
 def dashboard(request):
+    apply_daily_bonus()  # 🟢 This triggers the bonus if 24h passed
+
     wallet = Wallet.objects.get(user=request.user)
     next_bonus_time = wallet.last_bonus_added + timedelta(hours=24)
-    return render(request, 'dashboard.html', {'wallet': wallet, 'next_bonus_time': next_bonus_time})
+
+    return render(request, 'dashboard.html', {
+        'wallet': wallet,
+        'next_bonus_time': next_bonus_time
+    })
