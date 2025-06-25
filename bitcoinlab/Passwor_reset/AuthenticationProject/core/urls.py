@@ -16,6 +16,13 @@ urlpatterns = [
     path('ton', views.ton, name='ton'),
     path('usdt', views.usdt, name='usdt'),
     path('sol', views.sol, name='sol'),
+    path('bnb', views.bnb, name='bnb'),
+    path('tron', views.tron, name='tron'),
+    path('doge', views.doge, name='doge'),
+    path('sui', views.sui, name='sui'),
+    path('bgb', views.bgb, name='bgb'),
+    path('usdc', views.usdc, name='usdc'),
+    
     path('airdrop', views.airdrop, name='airdrop'),
     path('dashboard', views.dashboard, name='dashboard'),
 

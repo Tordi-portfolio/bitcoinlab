@@ -158,11 +158,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Wallet  # adjust if needed
 
+
 def get_crypto_prices():
     try:
         url = "https://api.coingecko.com/api/v3/simple/price"
         params = {
-            "ids": "bitcoin,ethereum,tether,solana,bitcoin-cash,the-open-network",
+            "ids": "bitcoin,ethereum,tether,solana,bitcoin-cash,the-open-network,binancecoin,tron,dogecoin,sui,bitget-token,usd-coin",
             "vs_currencies": "usd"
         }
         response = requests.get(url, params=params)
@@ -175,6 +176,12 @@ def get_crypto_prices():
             'sol': f"${data['solana']['usd']:,.2f}",
             'bch': f"${data['bitcoin-cash']['usd']:,.2f}",
             'ton': f"${data['the-open-network']['usd']:,.2f}",
+            'bnb': f"${data['binancecoin']['usd']:,.2f}",
+            'tron': f"${data['tron']['usd']:,.4f}",
+            'doge': f"${data['dogecoin']['usd']:,.4f}",
+            'sui': f"${data['sui']['usd']:,.4f}",
+            'bgb': f"${data['bitget-token']['usd']:,.4f}",
+            'usdc': f"${data['usd-coin']['usd']:,.2f}",
         }
 
     except Exception as e:
@@ -186,7 +193,14 @@ def get_crypto_prices():
             'sol': "Unavailable",
             'bch': "Unavailable",
             'ton': "Unavailable",
+            'bnb': "Unavailable",
+            'tron': "Unavailable",
+            'doge': "Unavailable",
+            'sui': "Unavailable",
+            'bgb': "Unavailable",
+            'usdc': "Unavailable",
         }
+
 
 
 @login_required
@@ -440,6 +454,43 @@ def transfer_crypto(request):
                 wallet.solana_balance -= amount
                 recipient_wallet.solana_balance += amount
 
+            elif crypto == 'BNB':
+                if wallet.bnb_balance < amount:
+                    raise ValueError("Insufficient BNB balance.")
+                wallet.bnb_balance -= amount
+                recipient_wallet.bnb_balance += amount
+            
+            elif crypto == 'TRON':
+                if wallet.tron_balance < amount:
+                    raise ValueError("Insufficient tron balance.")
+                wallet.tron_balance -= amount
+                recipient_wallet.tron_balance += amount
+
+            elif crypto == 'DOGE':
+                if wallet.doge_balance < amount:
+                    raise ValueError("Insufficient doge balance.")
+                wallet.doge_balance -= amount
+                recipient_wallet.doge_balance += amount
+
+            elif crypto == 'SUI':
+                if wallet.sui_balance < amount:
+                    raise ValueError("Insufficient sui balance.")
+                wallet.sui_balance -= amount
+                recipient_wallet.sui_balance += amount
+
+            elif crypto == 'BGB':
+                if wallet.bgb_balance < amount:
+                    raise ValueError("Insufficient bgb balance.")
+                wallet.bgb_balance -= amount
+                recipient_wallet.bgb_balance += amount
+
+            elif crypto == 'USDC':
+                if wallet.usdc_balance < amount:
+                    raise ValueError("Insufficient usdc balance.")
+                wallet.usdc_balance -= amount
+                recipient_wallet.usdc_balance += amount
+
+
             wallet.save()
             recipient_wallet.save()
 
@@ -498,9 +549,26 @@ def usdt(request):
 def ton(request):
     return render(request, 'deposit/ton.html')
 
+def bnb(request):
+    return render(request, 'deposit/bnb.html')
+
+def tron(request):
+    return render(request, 'deposit/tron.html')
+
+def doge(request):
+    return render(request, 'deposit/doge.html')
+
+def sui(request):
+    return render(request, 'deposit/sui.html')
+
+def bgb(request):
+    return render(request, 'deposit/bgb.html')
+
+def usdc(request):
+    return render(request, 'deposit/usdc.html')
+
 def airdrop(request):
     return render(request, 'airdrop.html')
-
 
 
 from django.utils import timezone
@@ -509,7 +577,17 @@ from .models import Wallet
 from datetime import timedelta
 
 
+from .utils import apply_daily_bonus
+from datetime import timedelta
+
+@login_required
 def dashboard(request):
+    apply_daily_bonus()  # 🟢 This triggers the bonus if 24h passed
+
     wallet = Wallet.objects.get(user=request.user)
     next_bonus_time = wallet.last_bonus_added + timedelta(hours=24)
-    return render(request, 'dashboard.html', {'wallet': wallet, 'next_bonus_time': next_bonus_time})
+
+    return render(request, 'dashboard.html', {
+        'wallet': wallet,
+        'next_bonus_time': next_bonus_time
+    })

@@ -12,6 +12,11 @@ class TransactionForm(forms.ModelForm):
             'user': forms.Select(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.00000001'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'created_at': forms.DateTimeInput(attrs={
+                'class': 'form-control',
+                'type': 'datetime-local'
+            }),
+
         }
 
         def __init__(self, *args, **kwargs):

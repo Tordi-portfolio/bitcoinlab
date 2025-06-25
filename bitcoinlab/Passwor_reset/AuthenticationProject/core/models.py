@@ -14,11 +14,17 @@ class PasswordReset(models.Model):
 
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bitcoin_balance = models.DecimalField(max_digits=16, decimal_places=10, default=0.00000000)
-    eth_balance = models.DecimalField(max_digits=16, decimal_places=10, default=0.0000)
-    usdt_balance = models.DecimalField(max_digits=16, decimal_places=10, default=0.0000)
-    ton_balance = models.DecimalField(max_digits=16, decimal_places=10, default=0.000)
-    solana_balance = models.DecimalField(max_digits=16, decimal_places=10, default=0.000)
+    bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00000000)
+    eth_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
+    usdt_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
+    ton_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
+    solana_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
+    bnb_balance = models.DecimalField(max_digits=20, decimal_places=8, default=0.00)  # ✅ Add this line
+    tron_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
+    doge_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
+    sui_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
+    bgb_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
+    usdc_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
 
     last_bonus_added = models.DateTimeField(default=timezone.now)
 
@@ -34,7 +40,7 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
     address = models.CharField(max_length=255)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now) 
 
 
 class DepositConfirmation(models.Model):
@@ -43,6 +49,13 @@ class DepositConfirmation(models.Model):
         ('ETH', 'Ethereum'),
         ('USDT', 'USDT (Tether)'),
         ('BNB', 'BNB'),
+        ('TON', 'TON'),
+        ('SOL', 'SOL'),
+        ('USDC', 'USDC'),
+        ('SUI', 'SUI'),
+        ('DOGE', 'DOGE'),
+        ('BGB', 'BGB'),
+        ('TRON', 'TRON'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -63,6 +76,13 @@ class UserToUserTransfer(models.Model):
         ('USDT', 'USDT'),
         ('TON', 'Toncoin'),
         ('SOL', 'Solana'),
+        ('BNB', 'binancecoin'),
+
+        ('USDC', 'USDC'),
+        ('SUI', 'SUI'),
+        ('DOGE', 'DOGE'),
+        ('BGB', 'BGB'),
+        ('TRON', 'TRON'),
     ]
 
     sender = models.ForeignKey(User, related_name='sent_transfers', on_delete=models.CASCADE)
