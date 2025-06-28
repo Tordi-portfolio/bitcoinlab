@@ -15,16 +15,16 @@ class PasswordReset(models.Model):
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00000000)
-    eth_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
-    usdt_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
-    ton_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
-    solana_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00)
-    bnb_balance = models.DecimalField(max_digits=20, decimal_places=8, default=0.00)  # ✅ Add this line
-    tron_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
-    doge_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
-    sui_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
-    bgb_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
-    usdc_balance = models.DecimalField(default=0.0, max_digits=20, decimal_places=8)
+    eth_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    usdt_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    ton_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    solana_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    bnb_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)  # ✅ Add this line
+    tron_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    doge_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    sui_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    bgb_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    usdc_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
 
     last_bonus_added = models.DateTimeField(default=timezone.now)
 
@@ -33,7 +33,7 @@ class Wallet(models.Model):
     
 class Transaction(models.Model):
     TRANSACTION_TYPES = [('deposit', 'Deposit'), ('withdrawal', 'Withdrawal')]
-    STATUS_CHOICES = [('pending', 'Pending'), ('completed', 'Completed')]
+    STATUS_CHOICES = [('pending', 'Pending'), ('completed', 'Completed'), ('failed', 'Failed'), ('reversed', 'Reversed')]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=18, decimal_places=8)
@@ -94,3 +94,15 @@ class UserToUserTransfer(models.Model):
 
     def __str__(self):
         return f"{self.sender.username} sent {self.amount} {self.crypto} to {self.recipient.username}"
+    
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class UserMessage(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_message')
+    title = models.CharField(max_length=100, blank=True)
+    message = models.TextField(default='0')
+
+    def __str__(self):
+        return f"Message for {self.user.username}"

@@ -4,328 +4,337 @@
 
 {% load static %}
 
-  <header>
-    <div class="top-bar">
-      <span class="time">{{ request.user.username }}</span>
-      <span class="time">{{ request.user.email }}</span>
-    </div>
-  </header>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <section class="wallet">
-    <h2>BTC</h2>
-    <h2>👁️</h2>
-    <p class="balance">${{ wallet.bitcoin_balance }}</p>
-    <div class="actions">
-      <button><a style="text-decoration: none; color: white;" href="{% url 'withdraw' %}">Send</a></button>
-      <button><a style="text-decoration: none; color: white;" href="{% url 'deposit' %}">deposit</a></button>
-      <button><a style="text-decoration: none; color: white;" href="{% url 'transaction' %}">History</a></button>
-    </div>
-  </section>
-
-  <section class="crypto-section">
-    <h3>Crypto</h3>
-    <div class="crypto-item">
-  <img src="{% static 'image/bitcoin-btc-logo.png' %}" alt="BTC" width="24">
-  <div>
-    <h4>BTC <span>Bitcoin</span></h4>
-    <p>$67,000.00 <span class="up">+2.34%</span></p>
+<header>
+  <div class="top-bar">
+    <span class="time">{{ request.user.username }}</span>
+    <span class="time">{{ request.user.email }}</span>
   </div>
-  <div class="amount">
-    <p><h2>{{ btc }}</h2></p>
-    <p>${{ wallet.bitcoin_balance }}</p>
+</header>
+
+<section class="wallet">
+  <h2>BTC</h2>
+  <h2>👁️</h2>
+  <p class="balance">${{ wallet.bitcoin_balance }}</p>
+  <div class="actions">
+    <a href="{% url 'withdraw' %}" class="action-btn"><i class="fas fa-paper-plane"></i> Send</a>
+    <a href="{% url 'deposit' %}" class="action-btn"><i class="fas fa-wallet"></i> Deposit</a>
+    <a href="{% url 'transaction' %}" class="action-btn"><i class="fas fa-clock-rotate-left"></i> History</a>
   </div>
-</div>
+</section>
 
-<div class="crypto-item">
-  <img src="{% static 'image/ethereum-eth-logo.png' %}" alt="ETH" width="24">
-  <div>
-    <h4>ETH <span>Ethereum</span></h4>
-    <p>$3,500.00 <span class="up">+1.89%</span></p>
+{% if user_message %}
+  <div class="bitcoinlab-user-alert">
+    <h3 class="bitcoinlab-user-alert-title">{{ user_message.title }}</h3>
+    <p class="bitcoinlab-user-alert-text">{{ user_message.message }}</p>
   </div>
-  <div class="amount">
-    <p>{{ eth }}</p>
-    <p>${{ wallet.eth_balance }}</p>
-  </div>
-</div>
+{% endif %}
 
-<div class="crypto-item">
-  <img src="{% static 'image/tether-usdt-logo.png' %}" alt="USDT" width="24">
-  <div>
-    <h4>USDT <span>Tether</span></h4>
-    <p>$1.00 <span class="down">-0.01%</span></p>
-  </div>
-  <div class="amount">
-    <p>{{ usdt }}</p>
-    <p>${{ wallet.usdt_balance }}</p>
-  </div>
-</div>
-
-<div class="crypto-item">
-  <img src="{% static 'image/toncoin-ton-logo.png' %}" alt="TON" width="24">
-  <div>
-    <h4>TON <span>Toncoin</span></h4>
-    <p>$7.20 <span class="up">+3.11%</span></p>
-  </div>
-  <div class="amount">
-    <p>{{ ton }}</p>
-    <p>${{ wallet.ton_balance }}</p>
-  </div>
-</div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/bitcoin-cash-bch-logo.png' %}" alt="BCH" width="24">
-      <div>
-        <h4>BCH <span>Bitcoin Cash</span></h4>
-        <p>$494.06 <span class="up">+7.27%</span></p>
-      </div>
-      <div class="amount">
-        <p>{{ bch }}</p>
-        <p>${{ bch }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/solana-sol-logo.png' %}" alt="SOL" width="24">
-
-      <div>
-        <h4>SOL <span>Solana</span></h4>
-        <p>$0.00 <span class="down">-1.81%</span></p>
-      </div>
-      <div class="amount">
-        <p>{{ sol }}</p>
-        <p>${{ wallet.solana_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/binance-coin-bnb-logo.png' %}" alt="BNB" width="24">
-      <div>
-        <h4>BNB <span>Binance Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ bnb }}</p>
-        <p>${{ wallet.bnb_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/tron-trx-logo.png' %}" alt="BNB" width="24">
-      <div>
-        <h4>Tron <span>Tron Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ tron }}</p>
-        <p>${{ wallet.tron_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static  'image/dogecoin-doge-logo.png' %}" alt="DOGE" width="24">
-      <div>
-        <h4>DOGE <span>Doge Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ doge }}</p>
-        <p>${{ wallet.doge_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/sui-sui-logo.png' %}" alt="BNB" width="24">
-      <div>
-        <h4>SUI <span>Sui Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ sui }}</p>
-        <p>${{ wallet.sui_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/bitget-token-new-bgb-logo.png' %}" alt="BNB" width="24">
-      <div>
-        <h4>BGB <span>Bgb Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ bgb }}</p>
-        <p>${{ wallet.bgb_balance }}</p>
-      </div>
-    </div>
-
-    <div class="crypto-item">
-      <img src="{% static 'image/usd-coin-usdc-logo.png' %}" alt="BNB" width="24">
-      <div>
-        <h4>USDC <span>Usdc Coin</span></h4>
-        <p>$600.00 <span class="up">+2.10%</span></p> <!-- Example price -->
-      </div>
-      <div class="amount">
-        <p>{{ usdc }}</p>
-        <p>${{ wallet.usdc_balance }}</p>
-      </div>
-    </div>
-
-    <!-- Add more coins similarly... -->
-  </section>
-
-  <nav class="bottom-nav">
-    <button>🏠<br><a style="color: white;" href="{% url 'home' %}">Home</a></button>
-    <button>📈<br>Trending</button>
-    <button>🔁<br>Swap</button>
-    <button>💰<br>Earn</button>
-    <button>🔍<br>Discover</button>
-  </nav>
-
-  <style>
-    * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background-color: #121212;
-  color: #fff;
-  font-family: Arial, sans-serif;
-}
-
-header {
-  padding: 10px 20px;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #aaa;
-}
-
-.wallet {
-  padding: 20px;
+<style>
+.bitcoinlab-user-alert {
+  background-color: #ff3b3b;
+  color: #ffffff;
+  padding: 16px 20px;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 450px;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(255, 59, 59, 0.3);
+  border: 2px solid #ff1f1f;
+  animation: bitcoinlabFadeIn 0.4s ease;
 }
 
-.wallet h2 {
+.bitcoinlab-user-alert-title {
   font-size: 18px;
-  color: #ccc;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-.balance {
-  font-size: 30px;
-  margin: 10px 0;
+.bitcoinlab-user-alert-text {
+  font-size: 15px;
 }
 
-.actions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+@keyframes bitcoinlabFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.actions button {
-  background-color: #1e1e1e;
-  border: none;
-  padding: 10px;
-  color: #fff;
-  border-radius: 10px;
-  width: 60px;
-  font-size: 12px;
-}
-
-.crypto-section {
-  padding: 20px;
-}
-
-.crypto-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  background-color: #1f1f1f;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.crypto-item img {
-  width: 30px;
-  margin-right: 10px;
-}
-
-.crypto-item h4 {
-  font-size: 14px;
-}
-
-.crypto-item h4 span {
-  font-size: 12px;
-  color: #888;
-}
-
-.crypto-item p {
-  font-size: 14px;
-}
-
-.amount {
-  margin-left: auto;
-  text-align: right;
-}
-
-.up {
-  color: #00ff99;
-}
-
-.down {
-  color: #ff4444;
-}
-  </style>
-
-  <!-- <style>
-    .bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #1a1a1a;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid #333;
-}
-
-.bottom-nav button {
-  background: none;
-  border: none;
-  color: #ccc;
-  font-size: 14px;
-  text-align: center;
-}
-  </style> -->
-
-  <style>
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #2c3e50;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  z-index: 999;
-}
-
-.bottom-nav button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 14px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.bottom-nav button:hover {
-  color: #f1c40f;
-}
 </style>
-  </style>
+
+
+<section class="crypto-section">
+  <h3>Crypto</h3>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/bitcoin-btc-logo.png' %}" alt="BTC" width="24">
+    <div>
+      <h4>BTC <span>Bitcoin</span></h4>
+      <p> <span class="up">+2.34%</span></p>
+    </div>
+    <div class="amount">
+      <p><h2>{{ btc }}</h2></p>
+      <p>${{ wallet.bitcoin_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/ethereum-eth-logo.png' %}" alt="ETH" width="24">
+    <div>
+      <h4>ETH <span>Ethereum</span></h4>
+      <p> <span class="up">+1.89%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ eth }}</p>
+      <p>${{ wallet.eth_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/tether-usdt-logo.png' %}" alt="USDT" width="24">
+    <div>
+      <h4>USDT <span>Tether</span></h4>
+      <p> <span class="down">-0.01%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ usdt }}</p>
+      <p>${{ wallet.usdt_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/toncoin-ton-logo.png' %}" alt="TON" width="24">
+    <div>
+      <h4>TON <span>Toncoin</span></h4>
+      <p> <span class="up">+3.11%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ ton }}</p>
+      <p>${{ wallet.ton_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/bitcoin-cash-bch-logo.png' %}" alt="BCH" width="24">
+    <div>
+      <h4>BCH <span>Bitcoin Cash</span></h4>
+      <p> <span class="up">+7.27%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ bch }}</p>
+      <p>${{ bch }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/solana-sol-logo.png' %}" alt="SOL" width="24">
+    <div>
+      <h4>SOL <span>Solana</span></h4>
+      <p> <span class="down">-1.81%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ sol }}</p>
+      <p>${{ wallet.solana_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/binance-coin-bnb-logo.png' %}" alt="BNB" width="24">
+    <div>
+      <h4>BNB <span>Binance Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ bnb }}</p>
+      <p>${{ wallet.bnb_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/tron-trx-logo.png' %}" alt="TRON" width="24">
+    <div>
+      <h4>Tron <span>Tron Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ tron }}</p>
+      <p>${{ wallet.tron_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/dogecoin-doge-logo.png' %}" alt="DOGE" width="24">
+    <div>
+      <h4>DOGE <span>Doge Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ doge }}</p>
+      <p>${{ wallet.doge_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/sui-sui-logo.png' %}" alt="SUI" width="24">
+    <div>
+      <h4>SUI <span>Sui Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ sui }}</p>
+      <p>${{ wallet.sui_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/bitget-token-new-bgb-logo.png' %}" alt="BGB" width="24">
+    <div>
+      <h4>BGB <span>Bgb Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ bgb }}</p>
+      <p>${{ wallet.bgb_balance }}</p>
+    </div>
+  </div>
+
+  <div class="crypto-item">
+    <img src="{% static 'image/usd-coin-usdc-logo.png' %}" alt="USDC" width="24">
+    <div>
+      <h4>USDC <span>Usdc Coin</span></h4>
+      <p> <span class="up">+2.10%</span></p>
+    </div>
+    <div class="amount">
+      <p>{{ usdc }}</p>
+      <p>${{ wallet.usdc_balance }}</p>
+    </div>
+  </div>
+
+</section>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #121212;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+
+  header {
+    padding: 10px 20px;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #aaa;
+  }
+
+  .wallet {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .wallet h2 {
+    font-size: 18px;
+    color: #ccc;
+  }
+
+  .balance {
+    font-size: 30px;
+    margin: 10px 0;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    font-weight: bold;
+    border-radius: 12px;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(0, 255, 204, 0.2);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, #00cec9, #00b894);
+    box-shadow: 0 6px 20px rgba(0, 255, 204, 0.4);
+  }
+
+  .crypto-section {
+    padding: 20px;
+  }
+
+  .crypto-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .crypto-item img {
+    width: 30px;
+    margin-right: 10px;
+  }
+
+  .crypto-item h4 {
+    font-size: 14px;
+  }
+
+  .crypto-item h4 span {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .crypto-item p {
+    font-size: 14px;
+  }
+
+  .amount {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .up {
+    color: #00ff99;
+  }
+
+  .down {
+    color: #ff4444;
+  }
+</style>
+
+<script>
+  setTimeout(() => {
+    const alertBox = document.querySelector('.bitcoinlab-user-alert');
+    if (alertBox) alertBox.style.display = 'none';
+  }, 20000);
+</script>
 
 {% endblock %}

@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.urls import reverse
 from .forms import TransactionForm
 from .models import *
-from .models import Wallet, Transaction
+from .models import Wallet, Transaction, UserMessage
 from django.contrib.auth.decorators import user_passes_test
 from decimal import Decimal, InvalidOperation
 from bs4 import BeautifulSoup
@@ -18,9 +18,11 @@ import requests
 
 # Create your views here.
 
-
 def is_admin(user):
     return user.is_superuser or user.is_staff
+
+def index(request):
+    return render(request, 'index.html')
 
 def create_transaction(request):
     if request.method == 'POST':
@@ -212,7 +214,17 @@ def home(request):
     except Wallet.DoesNotExist:
         wallet = Wallet.objects.create(user=request.user, bitcoin_balance=0.0)
 
-    context = {**prices, 'wallet': wallet}
+    # ⬇️ Add user message
+    try:
+        user_message = request.user.user_message
+    except:
+        user_message = None
+
+    context = {
+        **prices,
+        'wallet': wallet,
+        'user_message': user_message
+    }
     return render(request, 'home.html', context)
 
 
@@ -282,7 +294,7 @@ def LoginView(request):
 def LogoutView(request):
     logout(request)
     messages.success(request, "Logout successfully...")
-    return redirect('login')
+    return redirect('index')
 
 
 def ForgotPassword(request):
