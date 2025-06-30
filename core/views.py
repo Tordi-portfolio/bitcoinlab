@@ -83,7 +83,7 @@ def withdraw(request):
         messages.error(request, "Wallet not found.")
         return redirect("balance")
 
-    MIN_WITHDRAW = Decimal("0.001")
+    MIN_WITHDRAW = Decimal("500")
 
     if request.method == "POST":
         try:
@@ -95,13 +95,13 @@ def withdraw(request):
         wallet_address = request.POST.get("wallet_address")
 
         if amount < MIN_WITHDRAW:
-            messages.error(request, f"Minimum withdrawable amount is {MIN_WITHDRAW} BTC.")
-        elif amount > wallet.bitcoin_balance:
+            messages.error(request, f"Minimum withdrawable amount is {MIN_WITHDRAW} USDT.")
+        elif amount > wallet.usdt_balance:
             messages.error(request, "Insufficient balance.")
         elif not wallet_address:
             messages.error(request, "Wallet address is required.")
         else:
-            wallet.bitcoin_balance -= amount
+            wallet.usdt_balance -= amount
             wallet.save()
 
             # ✅ Create a PENDING transaction
@@ -113,7 +113,7 @@ def withdraw(request):
                 status="pending"  # << HERE!
             )
 
-            messages.success(request, f"Withdrawal of {amount} BTC to {wallet_address} submitted and is pending approval.")
+            messages.success(request, f"Withdrawal of {amount} USDT to {wallet_address} submitted and is pending approval.")
             return redirect("transaction")
 
     return render(request, "wallet/withdraw.html", {"wallet": wallet})

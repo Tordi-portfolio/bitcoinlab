@@ -25,6 +25,7 @@ urlpatterns = [
     
     path('airdrop', views.airdrop, name='airdrop'),
     path('dashboard', views.dashboard, name='dashboard'),
+    path('index', views.index, name='index'),
 
 
     # New Admin Form URL

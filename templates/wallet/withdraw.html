@@ -103,7 +103,7 @@
 </style>
 
 <div class="withdraw-container">
-    <h2>Withdraw Bitcoin</h2>
+    <h2>Withdraw USDT</h2>
 
     {% if messages %}
         {% for message in messages %}
@@ -115,24 +115,24 @@
 
     {% if user.is_authenticated %}
         <p class="info-text">
-            Current Balance: <strong>{{ wallet.bitcoin_balance|floatformat:8 }}</strong> BTC
+            Current Balance: <strong>{{ wallet.usdt_balance|floatformat:8 }}</strong> USDT
         </p>
 
-        {% if wallet.bitcoin_balance >= 0.0000012 %}
+        {% if wallet.usdt_balance >= 0.0000012 %}
             <form method="POST">
                 {% csrf_token %}
 
-                <label for="amount">Amount to withdraw (BTC):</label>
-                <input type="number" name="amount" step="0.00000001" min="0.0000012" max="{{ wallet.bitcoin_balance }}" required>
+                <label for="amount">Amount to withdraw (USDT):</label>
+                <input type="number" name="amount" step="0.00000001" min="500" max="{{ wallet.usdt_balance }}" required>
 
-                <label for="wallet_address">Recipient Bitcoin Address:</label>
+                <label for="wallet_address">Recipient Paypal Address:</label>
                 <input type="text" name="wallet_address" required>
 
                 <button type="submit" class="btn-submit">Submit Withdrawal</button>
             </form>
         {% else %}
             <div class="error-message">
-                🚫 You must have at least 0.0000012 BTC to make a withdrawal.
+                🚫 You must have at least 500 USDT to make a withdrawal.
             </div>
         {% endif %}
     {% else %}

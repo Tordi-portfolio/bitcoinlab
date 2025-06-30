@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="welcome-section">
+  <div class="welcome-container">
+    <h1 class="welcome-title">🚀 Welcome to BitcoinLab</h1>
+    <p class="welcome-subtitle">Secure. Rewarding. Effortless Crypto Wallet Platform.</p>
+
+    <div class="welcome-description">
+      <p>
+        BitcoinLab is your all-in-one cryptocurrency wallet and rewards platform. 
+        Register now to start earning daily bonuses, track your digital assets, and enjoy secure, instant transactions.
+      </p>
+    </div>
+
+    <div class="action-buttons">
+      <a href="{% url 'login' %}" class="btn-login">Login</a>
+      <a href="{% url 'register' %}" class="btn-register">Register</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .welcome-section {
+    background: linear-gradient(145deg, #0f131a, #121b2e);
+    color: #ffffff;
+    padding: 100px 20px;
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .welcome-container {
+    background-color: #1a1f2b;
+    padding: 50px;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    box-shadow: 0 0 25px rgba(0, 255, 195, 0.15);
+  }
+
+  .welcome-title {
+    font-size: 2.8rem;
+    color: #00ffc3;
+    margin-bottom: 10px;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-bottom: 30px;
+  }
+
+  .welcome-description {
+    font-size: 1rem;
+    color: #dddddd;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .btn-login,
+  .btn-register {
+    padding: 12px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: 0.3s ease;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .btn-login {
+    background-color: transparent;
+    border: 2px solid #00ffc3;
+    color: #00ffc3;
+  }
+
+  .btn-login:hover {
+    background-color: #00ffc3;
+    color: #1a1f2b;
+  }
+
+  .btn-register {
+    background-color: #00ffc3;
+    color: #1a1f2b;
+    border: 2px solid transparent;
+  }
+
+  .btn-register:hover {
+    background-color: transparent;
+    color: #00ffc3;
+    border: 2px solid #00ffc3;
+  }
+
+  @media (max-width: 600px) {
+    .welcome-title {
+      font-size: 2rem;
+    }
+
+    .welcome-subtitle {
+      font-size: 1rem;
+    }
+
+    .welcome-container {
+      padding: 30px 20px;
+    }
+
+    .btn-login,
+    .btn-register {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
+
+{% endblock %}

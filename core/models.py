@@ -14,22 +14,23 @@ class PasswordReset(models.Model):
 
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=10, default=0.00000000)
-    eth_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    usdt_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    ton_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    solana_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    bnb_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)  # ✅ Add this line
-    tron_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    doge_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    sui_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    bgb_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
-    usdc_balance = models.DecimalField(max_digits=6, decimal_places=5, default=0.00)
+    bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=10, default=Decimal('0.0000000000'))
+    eth_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    usdt_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    ton_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    solana_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    bnb_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    tron_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    doge_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    sui_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    bgb_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    usdc_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
 
     last_bonus_added = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.username}'s Wallet"
+    
     
 class Transaction(models.Model):
     TRANSACTION_TYPES = [('deposit', 'Deposit'), ('withdrawal', 'Withdrawal')]
