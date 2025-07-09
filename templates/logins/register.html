@@ -121,6 +121,19 @@
       margin: 10px 0;
     }
 
+    .show-password {
+      font-size: 14px;
+      margin-top: -15px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .show-password input[type="checkbox"] {
+      margin-right: 8px;
+      accent-color: #3498db;
+    }
+
     @media (max-width: 600px) {
       .center {
         padding: 30px 20px;
@@ -185,9 +198,15 @@
       </div>
 
       <div class="txt_field">
-        <input type="password" required name="password">
+        <input type="password" required name="password" id="password">
         <span></span>
         <label>Password</label>
+      </div>
+
+      <!-- Show password checkbox -->
+      <div class="show-password">
+        <input type="checkbox" id="togglePassword">
+        <label for="togglePassword">Show Password</label>
       </div>
 
       <input type="submit" value="Register">
@@ -197,6 +216,15 @@
       </div>
     </form>
   </div>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('change', function () {
+      passwordInput.type = this.checked ? 'text' : 'password';
+    });
+  </script>
 
 </body>
 </html>

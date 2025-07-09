@@ -196,7 +196,12 @@
         <div class="text-danger">{{ form.amount.errors }}</div>
       {% endif %}
     </div>
-    <button type="submit" class="btn btn-success">Send</button>
+
+    {% if user.username == 'Keanue-Reeves' %}
+        <p class="btn btn-success" style="text-align: center; text-decoration: none;"><a href="{% url 'home' %}" style="text-decoration: none; color: #ccc;">You Have Reached Your Monthly Limit</a></p>
+    {% else %}
+        <button type="submit" class="btn btn-success">Send</button>
+    {% endif %}
   </form>
 </div>
 
