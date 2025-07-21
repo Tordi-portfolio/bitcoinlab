@@ -6,10 +6,44 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
+<style>
+.profile-picture-container {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #00cec9;
+  box-shadow: 0 0 8px rgba(0, 255, 204, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: -5px; /* Moves the image upward */
+}
+
+.profile-picture-container img.profile-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+</style>
+
 <header>
   <div class="top-bar">
-    <span class="time">{{ request.user.username }}</span>
-    <span class="time">{{ request.user.email }}</span>
+    <div class="profile-picture-container">
+      {% if user.profile.image %}
+        <img src="{{ user.profile.image.url }}" alt="Profile Photo" class="profile-picture">
+      {% else %}
+        <img src="{% static 'default/default-profile.png' %}" alt="Default Profile" class="profile-picture">
+      {% endif %}
+    </div>
+    <div>
+      <span class="time">{{ request.user.email }}</span><hr>
+      <span class="time">{{ request.user.username }}</span>
+    </div>
   </div>
 </header>
 

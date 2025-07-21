@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .settings-container {
+    max-width: 600px;
+    margin: 80px auto;
+    padding: 30px;
+    background: #111;
+    color: #eee;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.05);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .settings-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #ffa500;
+  }
+
+  .setting-link {
+    display: flex;
+    align-items: center;
+    background: #1a1a1a;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    color: #eee;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+
+  .setting-link:hover {
+    background: #292929;
+  }
+
+  .setting-link i {
+    margin-right: 15px;
+    font-size: 20px;
+    color: #ffa500;
+  }
+</style>
+
+<div class="settings-container">
+  <h2>Account Settings</h2>
+  
+  <a href="{% url 'change_password' %}" class="setting-link">
+    <i class="fa fa-lock"></i> Change Password
+  </a>
+
+  <a href="{% url 'profile_settings' %}" class="setting-link">
+    <i class="fa fa-user"></i> Change Username & Email
+  </a>
+
+  <a href="{% url 'upload_profile_picture' %}" class="setting-link">
+    <i class="fa fa-user"></i> Change Profile Photo
+  </a>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+{% endblock %}
