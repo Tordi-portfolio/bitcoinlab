@@ -16,7 +16,7 @@ class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=10, default=Decimal('0.0000000000'))
     eth_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
-    usdt_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
+    usdt_balance = models.DecimalField(max_digits=14, decimal_places=5, default=Decimal('0.00000'))
     ton_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
     solana_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
     bnb_balance = models.DecimalField(max_digits=12, decimal_places=5, default=Decimal('0.00000'))
